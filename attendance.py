@@ -86,7 +86,7 @@ else:
     # Write attendance to file
     with open('attendance.txt', 'w') as f:
         for attendance in present:
-            f.write(', '.join(attendance) + "|n")
+            f.write(', '.join(attendance) + "\n")
 
     # Find absent students
     absent = [(name, id, guardian_name, phone) for name, id, guardian_name, phone in students if (name, id) not in [(p[0], p[1]) for p in present]]
