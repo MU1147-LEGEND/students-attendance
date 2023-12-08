@@ -25,29 +25,29 @@ import datetime
 
 
 # Load the encryption key from the file
-with open('license\encryption_key.sniper', 'rb') as f:
+with open('license/encryption_key.sniper', 'rb') as f:
     key = f.read()
 
 # Initialize the Fernet cipher with the encryption key
 cipher = Fernet(key)
 
 # Read the contents of the encrypted text file
-with open('license\license.pixel', 'rb') as f:
+with open('license/license.pixel', 'rb') as f:
     ciphertext = f.read()
 
 # Decrypt the ciphertext using the Fernet cipher
 plaintext = cipher.decrypt(ciphertext)
 
 # Write the decrypted data to a temporary file
-with open('license\license.txt', 'wb') as f:
+with open('license/license.txt', 'wb') as f:
     f.write(plaintext)
 
 # Read the expiration date from the temporary file
-with open('license\license.txt', 'r') as f:
+with open('license/license.txt', 'r') as f:
     expiration_date = datetime.datetime.strptime(f.read().strip(), '%Y-%m-%d').date()
 
 # Delete the temporary file
-os.remove('license\license.txt')
+os.remove('license/license.txt')
 
 # Check if the license has expired
 today = datetime.date.today()
@@ -58,7 +58,7 @@ else:
     # continue running the program normally
     import requests
     import pytz
-    from twilio.rest import Client
+    # from twilio.rest import Client
 
     # # Your Account SID and Auth Token from twilio.com/console
     # account_sid = 'AC72f6db2fe3aa5013f1bf29fe725df7e6'
@@ -66,7 +66,6 @@ else:
 
     # # Initialize the Twilio client
     # client = Client(account_sid, auth_token)
-
 
     # Load student data from file
     with open('students.txt', 'r') as f:
@@ -89,7 +88,8 @@ else:
             f.write(', '.join(attendance) + "\n")
 
     # Find absent students
-    absent = [(name, id, guardian_name, phone) for name, id, guardian_name, phone in students if (name, id) not in [(p[0], p[1]) for p in present]]
+    absent = [(name, id, guardian_name, phone) for name, id, guardian_name, phone in students if
+              (name, id) not in [(p[0], p[1]) for p in present]]
 
     # Write absent students to file
     with open('absent.txt', 'w') as f:
@@ -112,10 +112,10 @@ else:
     for name, id, guardian_name, phone in absent:
         msg = f'Hello {guardian_name}, your child {name} with ID {id} was absent from school today.'
         payload = {
-        "api_key": api_key,
-        "to": phone,
-        "msg": msg
-    }
+            "api_key": api_key,
+            "to": phone,
+            "msg": msg
+        }
         response = requests.post(url, data=payload)
     if response.status_code == 200:
         print("Message Report:", response.text)
